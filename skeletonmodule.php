@@ -4,7 +4,7 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 spl_autoload_register(function($className) {
-	$dir = __DIR__ . '/' ;
+	$dir = __DIR__ . '/../' ;
 	$filename = $dir . str_replace('\\', '/', $className) . ".php";
             
         if (file_exists($filename)) {
@@ -20,6 +20,6 @@ spl_autoload_register(function($className) {
 	
 });
 
-class skeletonmodule extends SkeletonModuleBase
+class skeletonmodule extends skeletonmodule\SkeletonModuleBase
 {	
 }

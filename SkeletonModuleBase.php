@@ -1,12 +1,21 @@
 <?php
 
+namespace skeletonmodule;
+
 if (!defined('_PS_VERSION_'))
 	exit;
 
-use \Module;
+use Module;
+use Tools;
+
+use skeletonmodule\classes\install\InstallModule;
+use skeletonmodule\classes\uninstall\UninstallModule;
+use skeletonmodule\classes\Translations;
 
 class SkeletonModuleBase extends Module
 {	
+    private $output_container = '';
+
 	public function __construct()
     {
         $this->name = 'skeletonmodule';
@@ -14,19 +23,32 @@ class SkeletonModuleBase extends Module
         $this->version = '1.0.0'; 
         $this->author = '';
         $this->need_instance = 0; 
-        $this->ps_versions_compliancy = array( 'min' => '1.6.1', 'max' => _PS_VERSION_ ); 
+        $this->ps_versions_compliancy = array( 
+        		'min' => '1.6.1', 
+        		'max' => _PS_VERSION_ 
+        	); 
         $this->bootstrap = true;
 
         parent::__construct();
 
-        $this->displayName = $this->l('Skeleton Module'); 
-        $this->description = $this->l('Module description.');         
-        $this->confirmUninstall = $this->l('Are you sure?');       
+        $translations = new Translations($this);
+        $this->translations = $translations->getTranslations();
+
+        $this->displayName = $this->translations['module_name']; 
+        $this->description = $this->translations['module_description']; 
+        $this->confirmUninstall = $this->translations['are_you_sure']; ;       
     }
 
+    /**
+     * Called on module installation
+     * @return bool
+     */
     public function install()
     {
-        if (!parent::install())
+        $install_module = new InstallModule($this);
+        $installation = $install_module->performInstallation();
+
+        if (!parent::install() || !$installation)
         {
             return false;
         }
@@ -35,14 +57,38 @@ class SkeletonModuleBase extends Module
 
     }
 
+    /**
+     * Called on module uninstallation
+     * @return bool
+     */
     public function uninstall() 
     {
-        if (!parent::uninstall()) 
+        $uninstall_module = new UninstallModule($this);
+        $installation = $uninstall_module->performInstallation();
+
+        if (!parent::uninstall() || !$uninstall_module) 
         {
             return false;
         }
  
         return true;    
+    }
+
+	public function getContent()
+	{
+		return null;
+	}
+
+    protected function setOutputContainer($content)
+    {
+        $this->output_container = $content;
+
+        return $this;
+    }
+
+    protected function getOutputContainer()
+    {
+        return $this->output_container;
     }
 
 }
