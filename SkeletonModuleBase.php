@@ -21,7 +21,7 @@ class SkeletonModuleBase extends Module
         $this->name = 'skeletonmodule';
         $this->tab = 'others'; 
         $this->version = '1.0.0'; 
-        $this->author = '';
+        $this->author = 'Somatek';
         $this->need_instance = 0; 
         $this->ps_versions_compliancy = array( 
         		'min' => '1.6.1', 
@@ -64,7 +64,7 @@ class SkeletonModuleBase extends Module
     public function uninstall() 
     {
         $uninstall_module = new UninstallModule($this);
-        $installation = $uninstall_module->performInstallation();
+        $installation = $uninstall_module->performUninstallation();
 
         if (!parent::uninstall() || !$uninstall_module) 
         {

@@ -2,55 +2,70 @@
 
 namespace skeletonmodule\classes\install;
 
-use skeletonmodule\SkeletonModuleBase;
-use skeletonmodule\classes\install\InstallActions;
+use Db;
+
+use skeletonmodule\classes\Queries;
+
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class InstallModule 
+class InstallModule
 {
-	private $successful = true;
-	private $install_actions = array();
 	private $module;
-
 
 	public function __construct(SkeletonModuleBase $module)
 	{
 		$this->module = $module;
 	}
-
 	/**
-	 * Iterates over InstallActions 
+	 * Iterates over installation actions
 	 * @return boolean
 	 */
 	public function performInstallation()
 	{
-		$actions = new InstallActions();
-		$methods = get_class_methods($actions);
+		$actions = $this->getInstallActions();
 
-		foreach ($methods as $index => $method) {
-			$result = $actions->{$method}();
+		foreach ($actions as $index => $action) {
+			$result = $action();
 
-			if ($result === false) {
-				$this->setSuccessful(false);
-
+			if (!$result)
 				break;
-			}
+			
 		}
 
-		return $this->getSuccessful();
+		return $result;
 	}
 
-	public function getSuccessful()
+	protected function getInstallActions()
 	{
-		return $this->successful;
+		return array(
+				/**
+				 * Execute database queries
+				 * @return boolean
+				 */
+				"executeQueries" => function() {
+					$queries_up = Queries::getQueriesUp();
+					$db = Db::getInstance();		
+
+					foreach ($queries_up as $index => $query) {
+						$result = $db->execute($query);
+
+						if (!$result)
+							break;
+			
+					}
+
+					return $result;
+				},
+				/**
+				 * Register hooks for the module
+				 * @return boolean
+				 */
+				"registerHooks" => function() {
+					return true;
+				}
+			);
 	}
 
-	public function setSuccessful($value)
-	{
-		$this->success = $value;
-
-		return $this;
-	}
 }

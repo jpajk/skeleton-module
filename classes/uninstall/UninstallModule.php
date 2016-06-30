@@ -2,58 +2,62 @@
 
 namespace skeletonmodule\classes\uninstall;
 
-use skeletonmodule\SkeletonModuleBase;
-use skeletonmodule\classes\uninstall\UninstallActions;
+use Db;
+
+use skeletonmodule\classes\Queries;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class UninstallModule 
+class UninstallModule
 {
-	private $successful = true;
-	private $install_actions = array();
 	private $module;
 
 	public function __construct(SkeletonModuleBase $module)
 	{
 		$this->module = $module;
 	}
-
 	/**
-	 * Iterates over InstallActions 
+	 * Iterates over installation actions
 	 * @return boolean
 	 */
 	public function performUninstallation()
 	{
-		$actions = new UninstallActions();
-		$methods = get_class_methods($actions);
+		$actions = $this->getUninstallActions();
 
-		foreach ($methods as $index => $method) {
-			$result = $actions->{$method}();
+		foreach ($actions as $index => $action) {
+			$result = $action();
 
-			if ($result === false) {
-				$this->setSuccessful(false);
-
+			if (!$result)
 				break;
-			}
+			
 		}
 
-		return $this->getSuccessful();
+		return $result;
 	}
 
-	public function getSuccessful()
+	protected function getUninstallActions()
 	{
-		return $this->successful;
+		return array(
+				/**
+				 * Execute database queries
+				 * @return boolean
+				 */
+				"executeQueries" => function() {
+					$queries_up = Queries::getQueriesDown();
+					$db = Db::getInstance();		
+
+					foreach ($queries_up as $index => $query) {
+						$result = $db->execute($query);
+
+						if (!$result)
+							break;
+			
+					}
+
+					return $result;
+				},				
+			);
 	}
 
-	/**	 
-	 * @param bool $value
-	 * @return skeletonmodule\classes\uninstall\UninstallModule;
-	 */
-	public function setSuccessful($value)
-	{
-		$this->successful = (bool) $value;
-
-		return $this;
-	}
 }
