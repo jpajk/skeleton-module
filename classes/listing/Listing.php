@@ -7,9 +7,13 @@ if (!defined('_PS_VERSION_'))
 
 use ObjectModel;
 
+use skeletonmodule\traits\ModifiedObjectModel;
+
 class Listing extends ObjectModel
 {
-	public $title;
+    use ModifiedObjectModel;
+
+	public $title_listing;
 
 	/**
      * @see ObjectModel::$definition
@@ -20,7 +24,7 @@ class Listing extends ObjectModel
     		'multilang'		 => true,
     		'multilang_shop' => true,
     		'fields' => array(
-    				'title' => array(self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName', 'size' => 255)
+    				'title_listing' => array(self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName', 'size' => 255)
     			)
     	);
 }

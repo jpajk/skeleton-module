@@ -8,13 +8,14 @@ if (!defined('_PS_VERSION_'))
 use Module;
 use Tools;
 
+use skeletonmodule\classes\handle\HandleRequest;
 use skeletonmodule\classes\install\InstallModule;
 use skeletonmodule\classes\uninstall\UninstallModule;
 use skeletonmodule\classes\Translations;
 
 class SkeletonModuleBase extends Module
 {	
-    private $output_container = '';
+    private $output_container = '';    
 
 	public function __construct()
     {
@@ -30,9 +31,8 @@ class SkeletonModuleBase extends Module
         $this->bootstrap = true;
 
         parent::__construct();
-
-        $translations = new Translations($this);
-        $this->translations = $translations->getTranslations();
+        
+        $this->translations = $this->getTranslations();
 
         $this->displayName = $this->translations['module_name']; 
         $this->description = $this->translations['module_description']; 
@@ -76,19 +76,46 @@ class SkeletonModuleBase extends Module
 
 	public function getContent()
 	{
-		return null;
+        $handle_request = new HandleRequest($this);
+        $handle_request->handle();
+
+		return $this->getOutputContainer();
 	}
 
-    protected function setOutputContainer($content)
+    public function setOutputContainer($content)
     {
-        $this->output_container = $content;
+        $this->output_container .= $content;
 
         return $this;
     }
 
-    protected function getOutputContainer()
+    public function getOutputContainer()
     {
         return $this->output_container;
+    }
+
+    public function getTranslations()
+    {
+        return array(
+                /** Module translations */
+                'module_name'            => $this->l('Skeleton Module'),
+                'module_description'     => $this->l('Module description'),
+                'are_you_sure'           => $this->l('Are you sure?'),
+
+                /** List translations */
+                'id'                     => $this->l('ID'),
+                'title'                  => $this->l('Title'),
+                'title_listing'          => $this->l('Listing titles'),
+                'add_new_list'           => $this->l('Add new list'),
+
+                /** Form translations */
+                'contact_details'        => $this->l('Contact details'),
+                'save'                   => $this->l('Save'),
+                'skeleton_listing_title' => $this->l('Skeleton listing title'),
+
+                /** Error messages */
+                'unable_to_add_listing'  => $this->l('Wrong listing name.'),
+            );
     }
 
 }
