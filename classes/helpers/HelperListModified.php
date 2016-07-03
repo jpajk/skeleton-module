@@ -70,4 +70,26 @@ class HelperListModified extends HelperList
 
         return $tpl->fetch();
     }
+
+    /**
+     * Display view action link
+     */
+    public function displayViewLink($token = null, $id, $name = null)
+    {
+        $tpl = $this->createTemplate('list_action_view.tpl');
+        if (!array_key_exists('View', self::$cache_lang)) {
+            self::$cache_lang['View'] = $this->l('View', 'Helper');
+        }
+
+        $tpl->assign(array(
+            'href' => $this->currentIndex.'&'.$this->identifier.'='.$id
+                      .'&view'.$this->table
+                      .'&mod_path='.(isset($this->mod_path) ? 'view_' . $this->mod_path : '')
+                      .'&token='.($token != null ? $token : $this->token),
+            'action' => self::$cache_lang['View'],
+        ));
+
+        return $tpl->fetch();
+    }
+
 }

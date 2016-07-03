@@ -25,6 +25,7 @@ class Queries
 				) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8",
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing_item`(
 					`id_item` INT(10) NOT NULL AUTO_INCREMENT,
+					`id_parent` INT(10) NOT NULL,
 					PRIMARY KEY (id_item)
 				) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8",
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing_item_lang`(

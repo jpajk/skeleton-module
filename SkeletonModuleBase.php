@@ -106,7 +106,9 @@ class SkeletonModuleBase extends Module
                 'id'                     => $this->l('ID'),
                 'title'                  => $this->l('Title'),
                 'title_listing'          => $this->l('Listing titles'),
+                'title_listing_item'     => $this->l('Links'),
                 'add_new_list'           => $this->l('Add new list'),
+                'link'                   => $this->l('Link'),
 
                 /** Form translations */
                 'contact_details'        => $this->l('Contact details'),

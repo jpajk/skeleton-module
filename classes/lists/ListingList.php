@@ -42,7 +42,7 @@ class ListingList
 		$helper = new HelperListModified();        
         $helper->simple_header = false;
         $helper->identifier = 'id_listing';        
-        $helper->actions = array('edit', 'delete');
+        $helper->actions = array('view', 'edit', 'delete');
         $helper->show_toolbar = true;
         $helper->shopLinkType = false;        
         $helper->title = $this->module->translations['title_listing'];
@@ -69,10 +69,13 @@ class ListingList
 
 	public function getQuery()
 	{
+		$context = Context::getContext();
+
 		$sql = new DbQuery();
         $sql->select('*');
         $sql->from('skeleton_listing_lang', 'sll');        
         $sql->where('1');
+        $sql->where('id_lang =' . (int) $context->language->id);
 
         return Db::getInstance()->executeS($sql); 
 	}	
