@@ -43,11 +43,14 @@ class HandleRequest
 	public function getHandlers()
 	{
 		return array(
+				/** Edit listing */
 				"edit_listing" => function() {
-					$listing_form = new ListingForm($this->module);
+					$id_listing = (int) Tools::getValue('id_listing');
+					$listing_form = new ListingForm($this->module, $id_listing);
 					$output = $listing_form->getForm();					
 					$this->module->setOutputContainer($output);
 				},
+				/** Submit listing */
 				"submit_listing" => function() {
 					$id_listing = Tools::getValue('id_listing');
 					$id_listing = $id_listing ? $id_listing : null;
@@ -63,6 +66,17 @@ class HandleRequest
 						$controller->errors[] = $this->module->translations['unable_to_add_listing'];
 					}
 
+					$this->handleByName();
+				},
+				"delete_listing" => function() {
+					$id_listing = (int) Tools::getValue('id_listing');					
+
+					if (!$id_listing)
+						$this->handleByName();
+
+					$context = Context::getContext();
+					$object = new Listing($id_listing, $context->language->id);
+					$object->delete();
 					$this->handleByName();
 				},
 				/** Default */

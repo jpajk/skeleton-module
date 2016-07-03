@@ -13,7 +13,8 @@ class Listing extends ObjectModel
 {
     use ModifiedObjectModel;
 
-	public $title_listing;
+	public $id_listing;
+    public $title_listing;
 
 	/**
      * @see ObjectModel::$definition
@@ -24,6 +25,8 @@ class Listing extends ObjectModel
     		'multilang'		 => true,
     		'multilang_shop' => true,
     		'fields' => array(
+                    'id_listing' => array(self::TYPE_INT, 'validate' => 'isInt'),
+
     				'title_listing' => array(self::TYPE_STRING, 'lang' => true, 'validate' => 'isGenericName', 'size' => 255)
     			)
     	);

@@ -8,10 +8,10 @@ if (!defined('_PS_VERSION_'))
 use Context;
 use Db;
 use DbQuery;
-use HelperList;
 use Tools;
 
 use skeletonmodule\SkeletonModuleBase;
+use skeletonmodule\classes\helpers\HelperListModified;
 
 class ListingList
 {
@@ -26,8 +26,7 @@ class ListingList
 
 	public function getList()
 	{
-		$db_result = $this->getQuery();		
-
+		$db_result = $this->getQuery();
 
 		$fields_list = array(
 				'id_listing' => array(
@@ -40,15 +39,16 @@ class ListingList
 				),				
 			);	
 
-		$helper = new HelperList();        
+		$helper = new HelperListModified();        
         $helper->simple_header = false;
         $helper->identifier = 'id_listing';        
-        $helper->actions = array('delete');
+        $helper->actions = array('edit', 'delete');
         $helper->show_toolbar = true;
         $helper->shopLinkType = false;        
-        $helper->title = $this->module->translations['title_listing'];        
-        $helper->token = Tools::getAdminTokenLite('AdminModules');        
-        $helper->currentIndex = 'index.php?controller=AdminModules&configure=skeleton_module&tab_module=others&module_name=skeleton_module';
+        $helper->title = $this->module->translations['title_listing'];
+        $helper->token = Tools::getAdminTokenLite('AdminModules');
+        $helper->mod_path = 'listing';
+        $helper->currentIndex = 'index.php?controller=AdminModules&configure='.$this->module->name.'&tab_module=others&module_name=skeleton_module';
         $helper->toolbar_btn['new'] = array(
 			'href' => $this->context->link->getAdminLink('AdminModules', false)
 					  .'&configure='

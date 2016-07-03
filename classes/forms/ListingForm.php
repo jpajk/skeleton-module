@@ -6,11 +6,13 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 use Configuration;
+use Context;
 use HelperForm;
 use Language;
 use Link;
 use Tools;
 
+use skeletonmodule\classes\listing\Listing;
 use skeletonmodule\SkeletonModuleBase;
 
 class ListingForm
@@ -74,9 +76,18 @@ class ListingForm
 
 	public function getFieldsValue()
 	{
-		return array(
+		$fields_value = array(
 				'mod_path' 		=> 'submit_listing',
-				'id_listing'	=> (string) $this->id_listing
+				'id_listing'	=> $this->id_listing
 			);
+
+		if ($this->id_listing) {
+			$object = new Listing($this->id_listing);
+			$context = Context::getContext();
+			$id_lang = $context->language->id;
+			$fields_value['skeleton_listing_title'] = $object->title_listing[$id_lang];			
+		}
+
+		return $fields_value; 
 	}
 }
