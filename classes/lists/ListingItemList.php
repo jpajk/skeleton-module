@@ -18,12 +18,14 @@ class ListingItemList
 {
 	private $module;
 	private $context;
+	private $id_listing;
 
 
 	function __construct(SkeletonModuleBase $module)
 	{
 		$this->module = $module;
 		$this->context = Context::getContext();
+		$this->id_listing = Tools::getValue('id_listing');
 	}
 
 	public function getList()
@@ -70,6 +72,10 @@ class ListingItemList
 					  .Tools::getAdminTokenLite('AdminModules'),
 			'desc' => $this->module->translations['add_new_list']
 		);
+
+		$helper->url_options = array(
+				'id_listing' => $this->id_listing
+			);
 
         return $helper->generateList($db_result, $fields_list);
 	}

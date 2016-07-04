@@ -21,6 +21,7 @@ use skeletonmodule\classes\listing\ListingItem;
 class HandleRequest
 {
 	private $module;
+	private $options = array();
 
 	public function __construct(SkeletonModuleBase $module)
 	{
@@ -113,7 +114,7 @@ class HandleRequest
 					$link_validate = (bool) Validate::isUrl($link);
 
 					if ($title_validate && $link_validate && (bool) $id_parent) {
-						$listing_item = new ListingItem($id_listing);
+						$listing_item = new ListingItem($id_listing_item);
 						
 						$listing_item->item_title = $title;
 						$listing_item->item_link = $link;
@@ -125,6 +126,17 @@ class HandleRequest
 						$controller->errors[] = $this->module->translations['unable_to_add_listing'];
 					}
 
+					$this->handleByName("view_listing");
+				},
+				"delete_listing_item" => function() {
+					$id_item = (int) Tools::getValue('id_item');					
+
+					if (!$id_item)
+						$this->handleByName("view_listing");
+
+					$context = Context::getContext();
+					$object = new ListingItem($id_item, $context->language->id);
+					$object->delete();
 					$this->handleByName("view_listing");
 				},
 

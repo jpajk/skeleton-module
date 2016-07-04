@@ -96,10 +96,14 @@ class ListingItemForm
 			);
 
 		if ($this->id_listing_item) {
-			$object = new ListingItem($this->id_listing);
+			$object = new ListingItem($this->id_listing_item);
+			
 			$context = Context::getContext();
 			$id_lang = $context->language->id;
-			$fields_value['id_listing_item'] = $object->title_listing[$id_lang];			
+
+			$fields_value['item_title'] = $object->item_title[$id_lang];		
+			$fields_value['item_link'] = $object->item_link[$id_lang];		
+			
 		}
 
 		return $fields_value; 

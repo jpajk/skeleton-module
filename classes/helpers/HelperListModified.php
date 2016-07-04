@@ -18,12 +18,13 @@ class HelperListModified extends HelperList
         $tpl = $this->createTemplate('list_action_edit.tpl');
         if (!array_key_exists('Edit', self::$cache_lang)) {
             self::$cache_lang['Edit'] = $this->l('Edit', 'Helper');
-        }
+        }                
 
         $tpl->assign(array(
             'href' => $this->currentIndex.'&'.$this->identifier.'='.$id
             		  .'&mod_path='.(isset($this->mod_path) ? 'edit_' . $this->mod_path : '')
             		  .'&update'.$this->table.($this->page && $this->page > 1 ? '&page='.(int)$this->page : '')
+                      .$this->getUrlOptions()
             		  .'&token='.($token != null ? $token : $this->token),
             'action' => self::$cache_lang['Edit'],
             'id' => $id
@@ -58,6 +59,7 @@ class HelperListModified extends HelperList
             		  .'&'.$this->identifier.'='.$id
             		  .'&mod_path='.(isset($this->mod_path) ? 'delete_' . $this->mod_path : '')
             		  //.'&delete'.$this->table
+                      .$this->getUrlOptions()
             		  .'&token='.($token != null ? $token : $this->token),
             'action' => self::$cache_lang['Delete'],
         );
@@ -85,11 +87,25 @@ class HelperListModified extends HelperList
             'href' => $this->currentIndex.'&'.$this->identifier.'='.$id
                       .'&view'.$this->table
                       .'&mod_path='.(isset($this->mod_path) ? 'view_' . $this->mod_path : '')
+                      .$this->getUrlOptions()
                       .'&token='.($token != null ? $token : $this->token),
             'action' => self::$cache_lang['View'],
         ));
 
         return $tpl->fetch();
+    }
+
+    public function getUrlOptions()
+    {
+        $url_options = '';
+
+        if (isset($this->url_options) && !empty($this->url_options)) {
+            foreach ($this->url_options as $key => $option) {
+                $url_options .= '&'.$key.'='.$option;
+            }
+        }
+
+        return $url_options;
     }
 
 }
