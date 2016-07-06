@@ -99,7 +99,7 @@ trait ModifiedObjectModel
     public function delete()
     {
         // @hook actionObject*DeleteBefore
-        Hook::exec('actionObjectDeleteBefore', array('object' => $this));
+        //Hook::exec('actionObjectDeleteBefore', array('object' => $this));
         //Hook::exec('actionObject'.get_class($this).'DeleteBefore', array('object' => $this));
 
         $this->clearCache();
@@ -130,7 +130,7 @@ trait ModifiedObjectModel
         }
 
         // @hook actionObject*DeleteAfter
-        Hook::exec('actionObjectDeleteAfter', array('object' => $this));
+        //Hook::exec('actionObjectDeleteAfter', array('object' => $this));
         //Hook::exec('actionObject'.get_class($this).'DeleteAfter', array('object' => $this));
 
         return $result;

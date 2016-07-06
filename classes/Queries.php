@@ -13,7 +13,7 @@ class Queries
 	{	
 		return array(
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing`(
-					`id_listing` INT(10) NOT NULL AUTO_INCREMENT,					
+					`id_listing` INT UNSIGNED NOT NULL AUTO_INCREMENT,					
 					PRIMARY KEY (id_listing)
 				) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8",
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing_lang`(
@@ -25,7 +25,7 @@ class Queries
 				) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8",
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing_item`(
 					`id_item` INT(10) NOT NULL AUTO_INCREMENT,
-					`id_parent` INT(10) NOT NULL,
+					`id_parent` INT UNSIGNED NOT NULL,
 					PRIMARY KEY (id_item)
 				) ENGINE="._MYSQL_ENGINE_." DEFAULT CHARSET=utf8",
 				"CREATE TABLE IF NOT EXISTS `"._DB_PREFIX_."skeleton_listing_item_lang`(
