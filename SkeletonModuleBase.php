@@ -8,6 +8,7 @@ if (!defined('_PS_VERSION_'))
 use Module;
 use Tools;
 
+use skeletonmodule\classes\listing\Listing;
 use skeletonmodule\classes\handle\HandleRequest;
 use skeletonmodule\classes\install\InstallModule;
 use skeletonmodule\classes\uninstall\UninstallModule;
@@ -46,9 +47,10 @@ class SkeletonModuleBase extends Module
     public function install()
     {
         $install_module = new InstallModule($this);
+        $parent_install = parent::install();
         $installation = $install_module->performInstallation();
 
-        if (!parent::install() || !$installation)
+        if ($parent_install || !$installation)
         {
             return false;
         }
@@ -81,6 +83,17 @@ class SkeletonModuleBase extends Module
 
 		return $this->getOutputContainer();
 	}
+
+    public function hookDisplayLeftColumn($params)
+    {
+        $listings = Listing::getListingsWithChildren();        
+
+        $this->context->smarty->assign(compact('listings'));
+
+        $output = $this->context->smarty->fetch(__DIR__.'/views/templates/hook/hookdisplayLeftColumn.tpl');
+
+        return $output;
+    }
 
     public function setOutputContainer($content)
     {

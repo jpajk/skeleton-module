@@ -4,8 +4,8 @@ namespace skeletonmodule\classes\install;
 
 use Db;
 
+use skeletonmodule\SkeletonModuleBase;
 use skeletonmodule\classes\Queries;
-
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -62,8 +62,8 @@ class InstallModule
 				 * Register hooks for the module
 				 * @return boolean
 				 */
-				"registerHooks" => function() {
-					return true;
+				"registerHooks" => function() {					
+					return $this->module->registerHook('displayLeftColumn');
 				}
 			);
 	}

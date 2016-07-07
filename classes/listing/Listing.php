@@ -9,6 +9,7 @@ use Db;
 use DbQuery;
 use ObjectModel;
 use Shop;
+use stdClass;
 
 use skeletonmodule\traits\ModifiedObjectModel;
 use skeletonmodule\classes\listing\ListingItem;
@@ -116,5 +117,38 @@ class Listing extends ObjectModel
         $sql->where('id_parent = ' . $id_listing);        
 
         return Db::getInstance()->executeS($sql); 
+    }
+
+    public static function getListingsWithChildren()
+    {
+        $sql = new DbQuery();
+        $sql->select('*');
+        $sql->from('skeleton_listing', 'sl');
+        $sql->leftJoin('skeleton_listing_lang', 'sll', 'sll.`id_listing` = sl.`id_listing`');
+        $sql->leftJoin('skeleton_listing_item', 'sli', 'sli.`id_parent` = sl.`id_listing`');
+        $sql->leftJoin('skeleton_listing_item_lang', 'slil', 'sli.`id_item` = slil.`id_item`');
+        $sql->where('1');
+
+        $result = Db::getInstance()->executeS($sql);        
+
+        if ($result)
+            $result = self::transformData($result);        
+
+        return $result;
+    }
+
+    public static function transformData(array $data)
+    {
+        if (!$data)
+            return $data;
+        
+        $return = array();
+
+        foreach ($data as $key => $datum) {
+            $return[$datum['id_listing']]['title_listing'] = $datum['title_listing'];
+            $return[$datum['id_listing']]['listing_items'][] = $datum['item_title'];
+        }
+
+        return $return;
     }
 }
