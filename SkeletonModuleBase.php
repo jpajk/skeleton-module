@@ -23,7 +23,7 @@ class SkeletonModuleBase extends Module
         $this->name = 'skeletonmodule';
         $this->tab = 'others'; 
         $this->version = '1.0.0'; 
-        $this->author = 'Somatek';
+        $this->author = 'Shikohin';
         $this->need_instance = 0; 
         $this->ps_versions_compliancy = array( 
         		'min' => '1.6.1', 
@@ -50,7 +50,7 @@ class SkeletonModuleBase extends Module
         $parent_install = parent::install();
         $installation = $install_module->performInstallation();
 
-        if ($parent_install || !$installation)
+        if (!$parent_install || !$installation)
         {
             return false;
         }
